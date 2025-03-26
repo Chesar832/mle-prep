@@ -1,6 +1,6 @@
 # Linux Basic Commands
-## Index
 
+## Index
 - [Basic Linux Commands](#basic-linux-commands)
 - [Directory Commands](#directory-commands)
 - [File Commands](#file-commands)
