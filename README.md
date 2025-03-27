@@ -1,4 +1,4 @@
-#   
+# DevOps and MLOps Notes
 
 ![img](https://www.conceptseating.com/wp-content/uploads/2021/01/Market-Programming-Banner.jpg)
 
@@ -14,7 +14,3 @@ it aims to bridge the gap between DevOps and the world of AI/ML.
 📚 **Explanations**: Detailed guides on DevOps and MLOps concepts.  
 🚀 **Tool Coverage**: Insights into popular tools and frameworks used in the industry.  
 💼 **Career Focus**: This knowledge is intended to help people to land a job of Machine Learning Engineer.
-
----
-
-✨ Let's learn and grow together in the exciting world of DevOps and MLOps!
