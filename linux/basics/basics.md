@@ -4,33 +4,33 @@
 - [Basic Linux Commands](#basic-linux-commands)
 - [Directory Commands](#directory-commands)
 - [File Commands](#file-commands)
-- [Users](#-users)
-    - [Switch User (Local Machine)](#-switch-user-local-machine)
-    - [Secure Remote Login](#-secure-remote-login)
-    - [User Accounts: Root, Regular Users & Sudo](#-user-accounts-root-regular-users--sudo)
-- [Downloading Files in Linux](#-downloading-files-in-linux)
-    - [Using `curl`](#-using-curl)
-    - [Using `wget`](#-using-wget)
+- [Users](#users)
+    - [Switch User (Local Machine)](#switch-user-local-machine)
+    - [Secure Remote Login](#secure-remote-login)
+    - [User Accounts: Root, Regular Users & Sudo](#user-accounts-root-regular-users--sudo)
+- [Downloading Files in Linux](#downloading-files-in-linux)
+    - [Using `curl`](#using-curl)
+    - [Using `wget`](#using-wget)
 - [Packages Management](#packages-management)
-    - [RPM (Red Hat Package Manager)](#-rpm-red-hat-package-manager)
-    - [YUM (Yellowdog Updater, Modified)](#-yum-yellowdog-updater-modified)
+    - [RPM (Red Hat Package Manager)](#rpm-red-hat-package-manager)
+    - [YUM (Yellowdog Updater, Modified)](#yum-yellowdog-updater-modified)
 - [Services](#services)
-    - [systemctl / service (Service Management Tool)](#-systemctl--service-service-management-tool)
-    - [Custom systemd Service (my_app)](#-custom-systemd-service-my_app)
-    - [Creating a systemd Service That Runs on Boot](#-creating-a-systemd-service-that-runs-on-boot)
+    - [systemctl / service (Service Management Tool)](#systemctl--service-service-management-tool)
+    - [Custom systemd Service (my_app)](#custom-systemd-service-my_app)
+    - [Creating a systemd Service That Runs on Boot](#creating-a-systemd-service-that-runs-on-boot)
 - [VI Editor](#vi-editor)
-    - [Move Around](#-move-around)
-    - [Delete](#-delete)
-    - [Copy & Paste](#-copy--paste)
-    - [Scroll Up/Down](#-scroll-updown)
+    - [Move Around](#move-around)
+    - [Delete](#delete)
+    - [Copy & Paste](#copy--paste)
+    - [Scroll Up/Down](#scroll-updown)
 - [Save & Quit Commands](#save--quit-commands)
-    - [Enter Command Mode](#-enter-command-mode)
-    - [Save](#-save)
-    - [Quit](#-quit)
-    - [Save & Quit](#-save--quit)
+    - [Enter Command Mode](#enter-command-mode)
+    - [Save](#save)
+    - [Quit](#quit)
+    - [Save & Quit](#save--quit)
 - [Find (Search) in Command Mode](#find-search-in-command-mode)
-    - [Find Text](#-find-text)
-    - [Repeat Search](#-repeat-search)
+    - [Find Text](#find-text)
+    - [Repeat Search](#repeat-search)
 
 ---
 
@@ -98,35 +98,35 @@
 
 ---
 
-## 👤 Users
+## Users
 
-### 🔄 Switch User (Local Machine)
+### Switch User (Local Machine)
 - `su <username>`  
-👉 Used to **switch to another user** on the same machine. You’ll need that user's password.  
+👉 Used to **switch to another user** on the same machine. You'll need that user's password.  
 ✅ Useful when you need to perform actions as another user (e.g., root or admin tasks).
 
-### 🌐 Secure Remote Login
+### Secure Remote Login
 - `ssh <username>@<ip-address>`  
-👉 Connects to a **remote machine securely** via SSH (Secure Shell). You'll be prompted for the remote user’s password.
+👉 Connects to a **remote machine securely** via SSH (Secure Shell). You'll be prompted for the remote user's password.
 
-## 👤 User Accounts: Root, Regular Users & Sudo
+## User Accounts: Root, Regular Users & Sudo
 
-### 👑 What is the Root User?
+### What is the Root User?
 - The **root** user is the **superuser** in Unix/Linux systems.
 - Has **unrestricted access** to all files, directories, and commands.
 - Can install software, manage system-wide settings, add/remove users, etc.
 
-### 👤 What is a Regular User?
+### What is a Regular User?
 - A **regular user** (e.g., `matthew`) has **limited permissions**.
 - Cannot access protected system areas (e.g., `/root`) or install packages without permission.
 
-### 🔐 What is `sudo`?
+### What is `sudo`?
 - `sudo` stands for **"superuser do"**.
 - It allows a **regular user** to run specific commands **with elevated privileges**.
 - Root users can grant `sudo` access to trusted users via the **`/etc/sudoers`** file.
 
-### ✅ Why use `sudo` instead of logging in as root?
-- It’s **safer** — only specific commands are elevated.
+### Why use `sudo` instead of logging in as root?
+- It's **safer** — only specific commands are elevated.
 - It provides **auditing** — sudo usage is logged.
 - Reduces risk of accidental system-wide changes.
 
@@ -139,11 +139,11 @@ sudo ls
 
 ---
 
-## 🌐 Downloading Files in Linux
+## Downloading Files in Linux
 
 You can use `curl` or `wget` to download files from the internet via the command line.
 
-### 📥 Using `curl`
+### Using `curl`
 ```bash
 curl http://www.some-site.com/some-file.txt -O
 ```
@@ -151,7 +151,7 @@ curl http://www.some-site.com/some-file.txt -O
 - `-O` saves the file with its original name.
 - Ideal for API interactions and multi-protocol support.
 
-### 📥 Using `wget`
+### Using `wget`
 ```bash
 wget http://www.some-site.com/some-file.txt -O some-file.txt
 ```
@@ -161,9 +161,9 @@ wget http://www.some-site.com/some-file.txt -O some-file.txt
 
 ----
 
-## 📦 Packages Management
+## Packages Management
 
-### 📦 RPM (Red Hat Package Manager)
+### RPM (Red Hat Package Manager)
 - `rpm -i package.rpm`  
     👉 Installs the specified RPM package.  
     ❗ Note: This command does not resolve or install dependencies.
@@ -183,7 +183,7 @@ wget http://www.some-site.com/some-file.txt -O some-file.txt
     👉 Checks if the specified RPM package is installed.  
     *Example:* `rpm -q httpd` checks if the `httpd` package is installed.
 
-### 📦 YUM (Yellowdog Updater, Modified)
+### YUM (Yellowdog Updater, Modified)
 - `yum install package_name`  
     👉 Installs the specified package along with its dependencies.
 
@@ -204,9 +204,9 @@ wget http://www.some-site.com/some-file.txt -O some-file.txt
     *Example:* `yum install httpd-2.4.6` installs version 2.4.6 of the `httpd` package.
 ---
 
-## 🛠️ Services
+## Services
 
-### 🛠️ systemctl / service (Service Management Tool)
+### systemctl / service (Service Management Tool)
 - `service httpd start` or `systemctl start httpd`  
     👉 Starts the `httpd` (Apache) service.
 
@@ -214,7 +214,7 @@ wget http://www.some-site.com/some-file.txt -O some-file.txt
     👉 Stops the `httpd` service.
 
 - `systemctl status httpd`  
-    👉 Checks the current status of the `httpd` service (running, stopped, etc).
+    �� Checks the current status of the `httpd` service (running, stopped, etc).
 
 - `systemctl enable httpd`  
     👉 Configures the `httpd` service to start automatically at system boot.
@@ -222,7 +222,7 @@ wget http://www.some-site.com/some-file.txt -O some-file.txt
 - `systemctl disable httpd`  
     👉 Prevents the `httpd` service from starting at boot time.
 
-### ⚙️ Custom systemd Service (my_app)
+### Custom systemd Service (my_app)
 
 You can create and manage your own custom services using `systemd` by defining a ***systemd unit file***.
 
@@ -261,7 +261,7 @@ systemctl status my_app
 
 📝 Tip: Place your custom `.service` file in `/etc/systemd/system/` and make sure it is owned by root for production use.
 
-### ⚙️ Creating a systemd Service That Runs on Boot
+### Creating a systemd Service That Runs on Boot
 To make a custom service (e.g., `my_app`) start when the system boots:
 
 ---
@@ -313,47 +313,47 @@ sudo systemctl enable my_app
 - `i`  
     👉 Switches to insert mode to start editing the file.
 
-### 📦 Move Around
+### Move Around
 - `h` → Move left  
 - `l` → Move right  
 - `j` → Move down  
 - `k` → Move up  
 
-### 🗑️ Delete
+### Delete
 - `x` → Delete character under cursor  
 - `dd` → Delete entire line  
 
-### 📋 Copy & Paste
+### Copy & Paste
 - `yy` → Copy (yank) the current line  
 - `p` → Paste after the current line  VI Editor - 
 
-### 🔃 Scroll Up/Down
+### Scroll Up/Down
 - `CTRL + u` → Scroll up  
 - `CTRL + d` → Scroll down  
 
 ## Save & Quit Commands
 
-### 💻 Enter Command Mode
+### Enter Command Mode
 - `:` → Enters command mode (used before all save/quit commands)
 
-### 💾 Save
+### Save
 - `:w` → Save the current file
 - `:w filename` → Save with a new filename
 
-### ❌ Quit
+### Quit
 - `:q` → Quit (if no changes)
 - `:q!` → Quit without saving (force discard changes)
 
-### ✅ Save & Quit
+### Save & Quit
 - `:wq` → Save and quit the editor
 
 ## Find (Search) in Command Mode
 
-### 🔍 Find Text
+### Find Text
 - `/pattern` → Search for `pattern` forward in the file  
-  *Example:* `/of` will highlight all instances of “of”
+  *Example:* `/of` will highlight all instances of "of"
 
-### 🔁 Repeat Search
+### Repeat Search
 - `n` → Jump to the next match
 - `N` → Jump to the previous match
 
