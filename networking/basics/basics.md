@@ -75,13 +75,78 @@ ip addr add 192.168.1.10/24 dev eth0
 
 So, now we can **share and receive info across the network** whose ip we pass to the `ip addr add` command.
 
-## Routing
+## Routing & Gateways
+A router is an intelligent device that is capable of mange and communicate multiple networks.
+
+The gateway something like the door of the router, the way in into the router and its respective networks.
+So, the systems/hosts need to know where that gateway is to can go trough it to the router networks.
+To see the existing routing configuration on the system, we'll use the `route` command.
+
+So, if we need to add a route of the router we have to secify the network ip and the gateway ip. Just like this:
+
+```bash
+# Command
+ip route add <network_ip to reach>/<cidr> via <gateway_ip>
+
+# Example
+ip route add 192.168.2.0/24 via 192.168.1.1
+```
+
+<p align="center">
+  <img src="../../img/example_routing.png" alt="img">
+</p>
+
+In the example `192.168.2.0` is the ip of the purple network (switch) and `192.168.1.1` is the ip of the gateway for the blue network where we're located trying to get access to the purple network.
+
+At this point, consider that when we're sending packets (units of data that contain information like source/destination addresses and the actual data being transmitted) our host or system uses its own router table.
+
+A routing table is like a GPS navigation system for network packets - it's a set of rules that tells data which path to take to reach its destination network through available gateways. It is used for the host to know where to send the packets but it does not know which one is the final destination of the packet.
+
+The host can deliver data directly to the network if we know it, or in case of not having the info about the destination network it will deliver the packets to its respective `default gateway`.
+
+For example, if we set `ip route add default via 192.168.1.1` we're telling the system:
+> "If a packet is going to an unknown destination (not on the local network), send it to 192.168.1.1. It will know how to forward it."
+
+But, what if we don't have a router but a **host that can act as an intermediary for two hosts?**
+
+In this example, we just have to:
+1. Make sure that B is **acting as a router**.
+2. Add the network we're trying to communicate with through the gateway of the "router".
+
+<p align="center">
+  <img src="../../img/host_as_router.png" alt="img">
+</p>
+
+But, there's a problem. If we try to ping the ip `192.168.2.5` we won't have a response back.
+
+This happens by a default behaviour of Linux, it doesn't pass the packets from one interface (`eth0` for this example) to another (`eth1`). The main reason is for **security risk**, because in case of a private network in blue and a public one for the purple on the image, we don't want people in purple get access to info in blue network.
+
+If we want to allow host B to forward packets across interfaces, we need to set it up.
+
+```bash
+# See the current boolean value of this behaviour
+cat /proc/sys/net//ipv4/ip_forward
+
+# Set it to True (this values is restored with reboots)
+echo 1 > /proc/sys/net//ipv4/ip_forward
+
+# To pin the value, we must set it into this path too
+# /etc/sysctl/conf
+net.ipv4.ip_forward = 1
+```
+
+## DNS Configurations in Linux
 
 
-## Default Gateway
 
 
-## DNS Configurations in LInux
+
+
+
+
+
+
+
 
 
 
