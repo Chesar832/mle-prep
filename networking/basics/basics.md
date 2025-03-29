@@ -1,10 +1,6 @@
-# Linux Basic Commands
-
-## Index
-some stuff here
+# Networking Basics
 
 ## Switching
-
 Let's talk about some concepts before jump into the practical part of applying commands to really understand them.
 
 **🧠 First: What is a host?**
@@ -75,7 +71,8 @@ ip addr add 192.168.1.10/24 dev eth0
 
 So, now we can **share and receive info across the network** whose ip we pass to the `ip addr add` command.
 
-## Routing & Gateways
+
+## Routing and Gateways
 A router is an intelligent device that is capable of mange and communicate multiple networks.
 
 The gateway something like the door of the router, the way in into the router and its respective networks.
@@ -136,6 +133,208 @@ net.ipv4.ip_forward = 1
 ```
 
 ## DNS Configurations in Linux
+
+To connect to other networks we can use aliases for other hosts we want to reach. So, for that purpose we will modify the `/etc/hosts` file.
+
+```bash
+# Open the file with your preferred text editor
+sudo nano /etc/hosts
+
+# Add the alias (ip and the name we want to reach, in this case the DB server) 
+192.168.1.10 DB-SERVER
+```
+
+This file is consider as the ground truth for the hostnames and their respective IPs in our own system, because the other host name could be something like "host02" but our system will always use the information in this file to resolve the name to the correct IP.
+
+Actually, we could set an alias to a `www.google.com` and our system will use the information in this file to resolve the name to the IP name in the file, causing an error because we actualy want to test our connecting with internet, we would be assessing our connection to the DB server.
+
+```bash
+# Open the file with your preferred text editor
+sudo nano /etc/hosts
+
+# Add the alias (incorrect)
+192.168.1.10 www.google.com
+
+# So, if we ping to the www.google.com we will get a wrong response because we altered wrong the file
+ping www.google.com
+```
+
+There's no limit to the number of aliases and hosts we can add to the file, we can add as many as we want.
+
+A DNS server is a system that **translates human-readable hostnames into IP addresses**. It's like a phonebook for the internet. It will link each name to the correct IP address and the hosts in the network will use it instead of the `/etc/hosts` file.
+
+**Nice, but how do we point to the DNS server?**
+
+We can set the DNS server with IP `192.168.1.100` in the `/etc/resolv.conf` file (all DNS servers has this file).
+
+```bash
+# Open the file with your preferred text editor of our system
+sudo nano /etc/resolv.conf
+
+# Add the ip server with its respective name
+nameserver        192.168.1.100
+```
+
+In this way, the system will use the DNS server to resolve the hostnames to the correct IPs and in case of changes we just have to update the file.
+
+**But, what if I have the a common name in my etc/hosts file and in the DNS server?**
+
+In this case, the system will use the information in the `/etc/hosts` file to resolve the name to the IP. If is not in the file, it will use the DNS server to resolve the name to the IP.
+
+To change this behaviour, we can modify the `/etc/nsswitch.conf` file.
+
+```bash
+# Open the file with your preferred text editor of our system
+sudo nano /etc/nsswitch.conf
+
+# Change the order of the query
+...
+hosts: dns files
+...
+```
+
+In this way, the system will use first the DNS server to resolve the name to the IP and if is not in the DNS server, it will use the information in the `/etc/hosts` file to resolve the name to the IP.
+
+**Nice, but if I use a name that is not in the DNS server and not in the `/etc/hosts` file?**
+
+In this case, the system will not be able to resolve the name to the IP and we will get an error.
+
+```bash
+ping www.facebook.com
+
+>> ping: www.facebook.com: Temporary failure in name resolution
+```
+
+So, to avoid this we can set a default public ip in the DNS server that we know that map multiple hosts like the `8.8.8.8` ip from Google DNS.
+
+```bash
+# Open the file with your preferred text editor of our system
+sudo nano /etc/resolv.conf
+
+# Add the default public ip (host tries in the order of the list)
+nameserver 192.168.1.100 # Our DNS server
+nameserver 8.8.8.8 # Google DNS
+```
+
+In this way, the system will use the default public ip to resolve the name to the IP in case of not encounter the name in the DNS server and the `/etc/hosts` file.
+
+Names such as `www.facebook.com` are called **FQDN** (Fully Qualified Domain Name) or domain names for short and they are used to identify a host in the network.
+
+The **TLD** (Top Level Domain) is the last part of the FQDN. This reveals the type of the host, for example:
+
+- `.com` for commercial websites
+- `.org` for non-profit organizations
+- `.net` for network-related entities
+- `.edu` for educational institutions
+- `.gov` for government agencies
+
+For a domain name:
+  - The `.` is the root of the domain name.
+  - The `www` is the subdomain of the domain name.
+  - The `facebook` is the host of the domain name.
+
+For example, Google handles multiples subdomains like `www.google.com`, `mail.google.com`, `drive.google.com`, etc.
+
+When we hit a domain name (like `apps.google.com`) in an organization, the company's DNS server follow the following steps:
+1. Hit the DNS server of the organization.
+2. As the internal server doesn't know the domain name, it will ask the root DNS server for the TLD server. This returns the IP of the TLD server.
+3. From our host, we hit the root (TLD) server to ask for the host of the domain name (`google.com` in this case). This returns the IP address of the DNS server of Google.
+4. Now, from our host, we hit the DNS server of Google to ask for the host of the domain name (`apps.google.com` in this case). This returns the IP address of the host.
+5. To avoid run this flow every time, the DNS server of Google will cache the IP address of the host for some time (seconds up to minutes).
+
+> 💡 With this knowledge, we can use better descriptive names for our IPs in the `/etc/hosts` file and DNS server in our company. So, instead of hit "web" we can hit something like "db.my_company.com" or "mail.my_company.com".
+
+There'are types of recording in the DNS server:
+
+| Record Type | Description | Example |
+|------------|-------------|---------|
+| **A Record** | Maps a hostname to an IPv4 address | example.com -> 192.168.1.1 |
+| **AAAA Record** | Maps a hostname to an IPv6 address | example.com -> 2001:0db8:85a3:0000:0000:8a2e:0370:7334 |
+| **CNAME Record** | Maps a hostname to another hostname | www.example.com -> example.com |
+| **MX Record** | Maps a hostname to a mail exchange server | example.com -> mail.example.com |
+| **NS Record** | Maps a hostname to a name server | example.com -> ns1.example.com |
+
+Consider that altough `ping` is a very practical command to check name resolution, it's not the only way to do it. We can use other commands like `dig` or `nslookup` to check name resolution.
+
+An extra consideration is that `nslookup` and `dig` are commands that ignore the `/etc/hosts` file because they are designed to be troubleshooting tools.
+
+**nslookup:**
+```bash
+# Consider that nslookup is a command that ignore the `/etc/hosts` file
+nslookup www.google.com
+
+>> Server: 192.168.1.100
+>> Address: 192.168.1.100#53
+
+>> Non-authoritative answer:
+>> Name: www.google.com
+>> Address: 172.217.14.14
+```
+
+**dig:**
+```bash
+# Consider that dig is a command that ignore the `/etc/hosts` file
+dig www.google.com
+
+>> ; <<>> DiG 9.16.20 <<>> www.google.com
+
+>> ;; global options: +cmd
+>> ;; Got answer:
+>> ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 4054
+>> ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+>> 
+>> ;; OPT PSEUDOSECTION:
+>> ; EDNS: version: 0, flags:; udp: 4096
+
+>> ;; QUESTION SECTION:
+>> www.google.com. IN A
+
+>> ;; ANSWER SECTION:
+>> www.google.com. 300 IN A 172.217.14.14
+
+>> ;; Query time: 0 msec
+>> ;; SERVER: 192.168.1.100#53
+>> ;; WHEN: Fri Mar 28 15:30:00 2025
+>> ;; MSG SIZE  rcvd: 52
+```
+
+To facilitate the configuration we cal alos us e the `search` command in the `/etc/resolv.conf` file.
+
+```bash
+# Open the file with your preferred text editor of our system
+sudo nano /etc/resolv.conf
+
+# Add the search command
+search my_company.com
+```
+
+In this way, the system will use the `search` command to resolve the name to the IP. For example, if we try to resolve the name just "mail" the system will try to resolve "mail.my_company.com".
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
